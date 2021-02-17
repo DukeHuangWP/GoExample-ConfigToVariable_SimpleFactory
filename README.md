@@ -1,4 +1,4 @@
-An golang example of using the Simple Factory, 'Config To Variable'
+'Config To Variable' a golang example of using the Simple Factory (Design Pattern).
 
 ## Before
 Frist you should know design pattern 'simple factory':
