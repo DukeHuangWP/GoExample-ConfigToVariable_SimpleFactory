@@ -5,7 +5,6 @@ Frist you should know design pattern 'simple factory':
 https://www.programmersought.com/article/76233705716/
 
 ![Alt text](./diagram.svg)
-<img src="./diagram.svg">
 
 ## Example
 Just see the code :)
