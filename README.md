@@ -1,7 +1,7 @@
 An golang example of using the Simple Factory, 'Config To Variable'
 
 ## Before
-Frist you should know design pattern -- simple factory:
+Frist you should know design pattern 'simple factory':
 https://www.programmersought.com/article/76233705716/
 
 ## Example
