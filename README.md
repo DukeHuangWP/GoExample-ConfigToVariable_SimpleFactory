@@ -18,8 +18,8 @@ import (
 func main() {
 	/*
 		func SetConfig(inputValue string, defaultValue, outputPointer interface{}, Custom customTypes) (err error)
-		> 將輸入值轉換成自訂型別並寫入到目標變數
-		@param inputValue: 外部輸入變數(須先轉成字串)
+		> 將輸入字串轉換任意變數 (若轉換失敗則輸出設定預設值)
+		@param inputValue: 外部輸入變數(需先轉成字串)
 		@param defaultValue: 預設值(當自定型別轉換發生錯誤時則輸出此值)
 		@param outputPointer:  寫入輸出變數的指標
 		@param Custom:  自訂型別，可OOP繼承與方法重載
@@ -91,9 +91,9 @@ func main() {
 
 }
 
-type customStruct struct{} //使用者可以自訂型別
+type customStruct struct{} //使用者可以自訂型別,藉由OOP繼承與方法重載擴增功能
 
-func (_ customStruct) GetValue(inputValue string) (output interface{}, err error) { //利用可OOP繼承與方法重載擴增功能
+func (_ customStruct) GetValue(inputValue string) (output interface{}, err error) { //使用者可依需求調整功能
 
 	var cache int
 	if index := strings.Index(inputValue, "."); index < 1 { //無條件捨去小數，直接直接取整數
