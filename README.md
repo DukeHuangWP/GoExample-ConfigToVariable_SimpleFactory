@@ -4,7 +4,8 @@ An golang example of using the Simple Factory, 'Config To Variable'
 Frist you should know design pattern 'simple factory':
 https://www.programmersought.com/article/76233705716/
 
-<img src="./diagram.svg">
+<!-- <img src="./diagram.svg">-->
+![Alt text](./diagram.svg)
 
 ## Example
 Just see the code :)
