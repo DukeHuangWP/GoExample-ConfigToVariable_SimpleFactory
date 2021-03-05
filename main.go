@@ -5,19 +5,10 @@ import (
 	"strconv"
 	"strings"
 
-	"customVariableExample/configVar"
+	configVar "customVariableExample/customVar"
 )
 
 func main() {
-	/*
-		func SetConfig(inputValue string, defaultValue, outputPointer interface{}, Custom customTypes) (err error)
-		> 將輸入字串轉換任意變數 (若轉換失敗則輸出設定預設值)
-		@param inputValue: 外部輸入變數(需先轉成字串)
-		@param defaultValue: 預設值(當自定型別轉換發生錯誤時則輸出此值)
-		@param outputPointer:  寫入輸出變數的指標
-		@param Custom:  自訂型別，可OOP繼承與方法重載
-		@return error : 錯誤提示
-	*/
 
 	var err error
 	var exBool bool
@@ -83,6 +74,17 @@ func main() {
 	} //輸出結果: testKey &{t1 t2 t3 t4 } (*main.CustomTypeValue)
 
 }
+
+/* 
+	工廠方法函式說明:
+	func SetConfig(inputValue string, defaultValue, outputPointer interface{}, Custom customTypes) (err error)
+	> 將輸入字串轉換任意變數 (若轉換失敗則輸出設定預設值)
+	@param inputValue: 外部輸入變數(需先轉成字串)
+	@param defaultValue: 預設值(當自定型別轉換發生錯誤時則輸出此值)
+	@param outputPointer:  寫入輸出變數的指標
+	@param Custom:  自訂型別，可OOP繼承與方法重載
+	@return error : 錯誤提示
+*/
 
 type customStruct struct{} //使用者可以自訂型別,藉由OOP繼承與方法重載擴增功能
 
