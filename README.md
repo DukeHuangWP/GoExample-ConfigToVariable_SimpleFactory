@@ -148,7 +148,6 @@ type CustomTypeValue struct {
 	f2 string
 	f3 string
 	f4 string
-	f5 string
 }
 
 func (mp customTypeMap) GetValue(inputValue string) (output interface{}, err error) {
