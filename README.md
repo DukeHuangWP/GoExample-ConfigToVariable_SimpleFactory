@@ -23,6 +23,15 @@ import (
 func main() {
 
 	var err error
+
+	var defBool bool
+	err = customVar.SetValue(true, &defBool, &customVar.SwitchType{})
+	if err != nil {
+		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", defBool, defBool, err)
+	} else {
+		fmt.Printf("輸出結果: %v (%T)\n", defBool, defBool)
+	} //輸出結果: true (bool)
+
 	var exBool bool
 	err = configVar.SetConfig("ON", false, &exBool, &configVar.SwitchType{})
 	if err != nil {

@@ -5,14 +5,22 @@ import (
 	"strconv"
 	"strings"
 
-	configVar "customVariableExample/customVar"
+	customVar "customVariableExample/customVar"
 )
 
 func main() {
 
 	var err error
+	var defBool bool
+	err = customVar.SetValue(true, &defBool, &customVar.SwitchType{})
+	if err != nil {
+		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", defBool, defBool, err)
+	} else {
+		fmt.Printf("輸出結果: %v (%T)\n", defBool, defBool)
+	} //輸出結果: true (bool)
+
 	var exBool bool
-	err = configVar.SetConfig("ON", false, &exBool, &configVar.SwitchType{})
+	err = customVar.SetConfig("ON", false, &exBool, &customVar.SwitchType{})
 	if err != nil {
 		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exBool, exBool, err)
 	} else {
@@ -20,7 +28,7 @@ func main() {
 	} //輸出結果: true (bool)
 
 	var exInt int8
-	err = configVar.SetConfig("60.1", "90", &exInt, &configVar.SecondsInADay{})
+	err = customVar.SetConfig("60.1", "90", &exInt, &customVar.SecondsInADay{})
 	if err != nil {
 		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exInt, exInt, err)
 	} else {
@@ -28,7 +36,7 @@ func main() {
 	} //輸出結果: 60 (int8)
 
 	var exUint uint64
-	err = configVar.SetConfig("-99.9", "11", &exUint, &customStruct{})
+	err = customVar.SetConfig("-99.9", "11", &exUint, &customStruct{})
 	if err != nil {
 		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exUint, exUint, err)
 	} else {
@@ -37,7 +45,7 @@ func main() {
 
 	var exSlice []uint32
 	exSlice = append(exSlice, 123)
-	err = configVar.SetConfig("456", "111", &exSlice, &configVar.AddStringSlice{})
+	err = customVar.SetConfig("456", "111", &exSlice, &customVar.AddStringSlice{})
 	if err != nil {
 		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exSlice, exSlice, err)
 	} else {
@@ -46,45 +54,32 @@ func main() {
 
 	var exCustomTypeSlice []interface{}
 	exCustomTypeSlice = append(exCustomTypeSlice, 456)
-	err = configVar.SetConfig("Test", "Def", &exCustomTypeSlice, &configVar.AddStringSlice{})
+	err = customVar.SetConfig("Test", "Def", &exCustomTypeSlice, &customVar.AddStringSlice{})
 	if err != nil {
 		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exCustomTypeSlice, exCustomTypeSlice, err)
 	} else {
 		fmt.Printf("輸出結果: %v (%T)\n", exCustomTypeSlice, exCustomTypeSlice)
 	} //輸出結果: [456 Test] ([]interface {})
 
-	// exStringMap := make(map[string]interface{})
-	// exStringMap["原始Key"] = "原始Value"
-	// err = configVar.SetConfig("VVVVVVVVVVVVV", exStringMap, &exStringMap, &stringMapType{SetKey: "KeyTest"})
-	// if err != nil {
-	// 	fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exStringMap, exStringMap, err)
-	// } else {
-	// 	fmt.Printf("輸出結果: %v (%T)\n", exStringMap, exStringMap)
-	// } //輸出結果: map[KeyTest:VVVVVVVVVVVVV 原始Key:原始Value] (map[string]interface {})
-
-	// var exCustomTypeMap interface{}
-	// err = configVar.SetConfig("testKey|t1|t2|t3|t4", nil, &exCustomTypeMap, &customTypeMap{})
-	// if err != nil {
-	// 	fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exCustomTypeMap, exCustomTypeMap, err)
-	// } else {
-	// 	exCustomTypeMapAssertion := exCustomTypeMap.(map[string]*CustomTypeValue)
-	// 	for index, value := range exCustomTypeMapAssertion {
-	// 		fmt.Printf("輸出結果: %v %v (%T)\n", index, value, value)
-	// 	}
-	// } //輸出結果: testKey &{t1 t2 t3 t4 } (*main.CustomTypeValue)
-
-	var exBool2 bool
-	err = configVar.SetValue(true, &exBool2, &configVar.SwitchType{})
-	fmt.Println(exBool2, err)
-
 	exStringMap := make(map[string]interface{})
 	exStringMap["原始Key"] = "原始Value"
-	err = configVar.SetValue(exStringMap, &exStringMap, &stringMapType{SetKey: "KeyTest"})
+	err = customVar.SetConfig("VVVVVVVVVVVVV", exStringMap, &exStringMap, &stringMapType{SetKey: "KeyTest"})
 	if err != nil {
 		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exStringMap, exStringMap, err)
 	} else {
 		fmt.Printf("輸出結果: %v (%T)\n", exStringMap, exStringMap)
 	} //輸出結果: map[KeyTest:VVVVVVVVVVVVV 原始Key:原始Value] (map[string]interface {})
+
+	var exCustomTypeMap interface{}
+	err = customVar.SetConfig("testKey|t1|t2|t3|t4", nil, &exCustomTypeMap, &customTypeMap{})
+	if err != nil {
+		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exCustomTypeMap, exCustomTypeMap, err)
+	} else {
+		exCustomTypeMapAssertion := exCustomTypeMap.(map[string]*CustomTypeValue)
+		for index, value := range exCustomTypeMapAssertion {
+			fmt.Printf("輸出結果: %v %v (%T)\n", index, value, value)
+		}
+	} //輸出結果: testKey &{t1 t2 t3 t4 } (*main.CustomTypeValue)
 
 }
 
