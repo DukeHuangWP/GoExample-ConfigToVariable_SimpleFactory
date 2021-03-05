@@ -1,4 +1,4 @@
-package configVar
+package customVar
 
 import (
 	"fmt"

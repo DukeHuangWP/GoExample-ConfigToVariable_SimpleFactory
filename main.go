@@ -53,29 +53,42 @@ func main() {
 		fmt.Printf("輸出結果: %v (%T)\n", exCustomTypeSlice, exCustomTypeSlice)
 	} //輸出結果: [456 Test] ([]interface {})
 
+	// exStringMap := make(map[string]interface{})
+	// exStringMap["原始Key"] = "原始Value"
+	// err = configVar.SetConfig("VVVVVVVVVVVVV", exStringMap, &exStringMap, &stringMapType{SetKey: "KeyTest"})
+	// if err != nil {
+	// 	fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exStringMap, exStringMap, err)
+	// } else {
+	// 	fmt.Printf("輸出結果: %v (%T)\n", exStringMap, exStringMap)
+	// } //輸出結果: map[KeyTest:VVVVVVVVVVVVV 原始Key:原始Value] (map[string]interface {})
+
+	// var exCustomTypeMap interface{}
+	// err = configVar.SetConfig("testKey|t1|t2|t3|t4", nil, &exCustomTypeMap, &customTypeMap{})
+	// if err != nil {
+	// 	fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exCustomTypeMap, exCustomTypeMap, err)
+	// } else {
+	// 	exCustomTypeMapAssertion := exCustomTypeMap.(map[string]*CustomTypeValue)
+	// 	for index, value := range exCustomTypeMapAssertion {
+	// 		fmt.Printf("輸出結果: %v %v (%T)\n", index, value, value)
+	// 	}
+	// } //輸出結果: testKey &{t1 t2 t3 t4 } (*main.CustomTypeValue)
+
+	var exBool2 bool
+	err = configVar.SetValue(true, &exBool2, &configVar.SwitchType{})
+	fmt.Println(exBool2, err)
+
 	exStringMap := make(map[string]interface{})
 	exStringMap["原始Key"] = "原始Value"
-	err = configVar.SetConfig("VVVVVVVVVVVVV", exStringMap, &exStringMap, &stringMapType{SetKey: "KeyTest"})
+	err = configVar.SetValue(exStringMap, &exStringMap, &stringMapType{SetKey: "KeyTest"})
 	if err != nil {
 		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exStringMap, exStringMap, err)
 	} else {
 		fmt.Printf("輸出結果: %v (%T)\n", exStringMap, exStringMap)
 	} //輸出結果: map[KeyTest:VVVVVVVVVVVVV 原始Key:原始Value] (map[string]interface {})
 
-	var exCustomTypeMap interface{}
-	err = configVar.SetConfig("testKey|t1|t2|t3|t4", nil, &exCustomTypeMap, &customTypeMap{})
-	if err != nil {
-		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exCustomTypeMap, exCustomTypeMap, err)
-	} else {
-		exCustomTypeMapAssertion := exCustomTypeMap.(map[string]*CustomTypeValue)
-		for index, value := range exCustomTypeMapAssertion {
-			fmt.Printf("輸出結果: %v %v (%T)\n", index, value, value)
-		}
-	} //輸出結果: testKey &{t1 t2 t3 t4 } (*main.CustomTypeValue)
-
 }
 
-/* 
+/*
 	工廠方法函式說明:
 	func SetConfig(inputValue string, defaultValue, outputPointer interface{}, Custom customTypes) (err error)
 	> 將輸入字串轉換任意變數 (若轉換失敗則輸出設定預設值)
@@ -127,7 +140,6 @@ type CustomTypeValue struct {
 	f2 string
 	f3 string
 	f4 string
-	f5 string
 }
 
 func (mp customTypeMap) GetValue(inputValue string) (output interface{}, err error) {
