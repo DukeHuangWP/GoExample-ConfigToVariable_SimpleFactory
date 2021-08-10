@@ -710,6 +710,52 @@ func configToVariable(inputValue string, defaultValue, outputPointer interface{}
 			}
 		}
 
+	case *map[string]struct{}:
+		var ok bool
+		outputPtr := outputPointer.(*map[string]struct{})
+		if len(*outputPtr) <= 0 {
+			(*outputPtr) = make(map[string]struct{})
+			if errVal == nil {
+				*outputPtr, ok = outputVal.(map[string]struct{})
+				if ok {
+					return nil
+				} else {
+					return fmt.Errorf("程序輸出變數 %v(%T).GetValue() 輸出應為(map[string]struct{},err)，不准許(%T)", (*outputPtr), Custom, outputVal)
+				}
+			} else {
+				*outputPtr, ok = defaultValue.(map[string]struct{})
+				if ok {
+					return errVal
+				} else {
+					return fmt.Errorf("程序輸出變數之defaultValue預設值 %v(%T).GetValue() 輸出應為(map[string]struct{},err)，不准許(%T)", (*outputPtr), Custom, defaultValue)
+				}
+			}
+
+		} else {
+			var cache map[string]struct{}
+			if errVal == nil {
+				cache, ok = outputVal.(map[string]struct{})
+				if ok {
+					for index := range cache {
+						(*outputPtr)[index] = struct{}{}
+					}
+					return nil
+				} else {
+					return fmt.Errorf("程序輸出變數 (%T).GetValue() 輸出應為(map[string]struct{},err)，不准許(%T)", Custom, outputVal)
+				}
+			} else {
+				cache, ok = defaultValue.(map[string]struct{})
+				if ok {
+					for index := range cache {
+						(*outputPtr)[index] = struct{}{}
+					}
+					return errVal
+				} else {
+					return fmt.Errorf("程序輸出變數之defaultValue預設值 (%T).GetValue() 輸出應為(map[string]struct{},err)，不准許(%T)", Custom, defaultValue)
+				}
+			}
+		}
+
 	case *interface{}:
 		outputPtr := outputPointer.(*interface{})
 		if errVal == nil {

@@ -8,73 +8,120 @@ import (
 	"strings"
 )
 
-type AddStringSlice struct{}
-
-func (_ AddStringSlice) GetValue(inputValue string) (output interface{}, err error) {
+type BaseSlice struct{} //僅轉換Golnag slice ([]int,[]uint,[]float,[]string,[]bool,[]interface) ，無做任何檢查或處理
+func (_ BaseSlice) GetValue(inputValue string) (output interface{}, err error) {
 	return inputValue, nil
 }
 
-type IntType struct{} //純轉換Golnag  int，無做任何處理
+type IntType struct{} //純轉換Golnag  int，無做任何檢查或處理
 func (_ IntType) GetValue(inputValue string) (output interface{}, err error) {
+	_, err = strconv.Atoi(inputValue)
+	if err != nil {
+		return nil, err
+	}
 	return inputValue, nil
 }
 
-type Int8Type struct{} //純轉換Golnag int8，無做任何處理
+type Int8Type struct{} //純轉換Golnag int8，無做任何檢查或處理
 func (_ Int8Type) GetValue(inputValue string) (output interface{}, err error) {
+	_, err = strconv.ParseInt(inputValue, 10, 8)
+	if err != nil {
+		return nil, err
+	}
 	return inputValue, nil
 }
 
-type Int16Type struct{} //純轉換Golnag int16，無做任何處理
+type Int16Type struct{} //純轉換Golnag int16，無做任何檢查或處理
 func (_ Int16Type) GetValue(inputValue string) (output interface{}, err error) {
+	_, err = strconv.ParseInt(inputValue, 10, 16)
+	if err != nil {
+		return nil, err
+	}
 	return inputValue, nil
 }
 
-type Int32Type struct{} //純轉換Golnag int32，無做任何處理
+type Int32Type struct{} //純轉換Golnag int32，無做任何檢查或處理
 func (_ Int32Type) GetValue(inputValue string) (output interface{}, err error) {
+	_, err = strconv.ParseInt(inputValue, 10, 32)
+	if err != nil {
+		return nil, err
+	}
 	return inputValue, nil
 }
 
-type Int64Type struct{} //純轉換Golnag int64，無做任何處理
+type Int64Type struct{} //純轉換Golnag int64，無做任何檢查或處理
 func (_ Int64Type) GetValue(inputValue string) (output interface{}, err error) {
+	_, err = strconv.ParseInt(inputValue, 10, 64)
+	if err != nil {
+		return nil, err
+	}
 	return inputValue, nil
 }
 
-type UintType struct{} //純轉換Golnag uint，無做任何處理
+type UintType struct{} //純轉換Golnag uint，無做任何檢查或處理
 func (_ UintType) GetValue(inputValue string) (output interface{}, err error) {
+	_, err = strconv.ParseUint(inputValue, 10, 32)
+	if err != nil {
+		return nil, err
+	}
 	return inputValue, nil
 }
 
-type Uint8Type struct{} //純轉換Golnag uint8，無做任何處理
+type Uint8Type struct{} //純轉換Golnag uint8，無做任何檢查或處理
 func (_ Uint8Type) GetValue(inputValue string) (output interface{}, err error) {
+	_, err = strconv.ParseUint(inputValue, 10, 8)
+	if err != nil {
+		return nil, err
+	}
 	return inputValue, nil
 }
 
-type Uint16Type struct{} //純轉換Golnag uint16，無做任何處理
+type Uint16Type struct{} //純轉換Golnag uint16，無做任何檢查或處理
 func (_ Uint16Type) GetValue(inputValue string) (output interface{}, err error) {
+	_, err = strconv.ParseUint(inputValue, 10, 16)
+	if err != nil {
+		return nil, err
+	}
 	return inputValue, nil
 }
 
-type Uint32Type struct{} //純轉換Golnag uint32，無做任何處理
+type Uint32Type struct{} //純轉換Golnag uint32，無做任何檢查或處理
 func (_ Uint32Type) GetValue(inputValue string) (output interface{}, err error) {
+	_, err = strconv.ParseUint(inputValue, 10, 32)
+	if err != nil {
+		return nil, err
+	}
 	return inputValue, nil
 }
 
-type Uint64Type struct{} //純轉換Golnag uint64，無做任何處理
+type Uint64Type struct{} //純轉換Golnag uint64，無做任何檢查或處理
 func (_ Uint64Type) GetValue(inputValue string) (output interface{}, err error) {
+	_, err = strconv.ParseUint(inputValue, 10, 16)
+	if err != nil {
+		return nil, err
+	}
 	return inputValue, nil
 }
 
-type Float32Type struct{} //純轉換Golnag float32，無做任何處理
+type Float32Type struct{} //純轉換Golnag float32，無做任何檢查或處理
 func (_ Float32Type) GetValue(inputValue string) (output interface{}, err error) {
+	_, err = strconv.ParseFloat(inputValue, 32)
+	if err != nil {
+		return nil, err
+	}
 	return inputValue, nil
 }
 
-type Float64Type struct{} //純轉換Golnag float64，無做任何處理
+type Float64Type struct{} //純轉換Golnag float64，無做任何檢查或處理
 func (_ Float64Type) GetValue(inputValue string) (output interface{}, err error) {
+	_, err = strconv.ParseFloat(inputValue, 64)
+	if err != nil {
+		return nil, err
+	}
 	return inputValue, nil
 }
 
-type StringType struct{} //純轉換Golnagstring，無做任何處理
+type StringType struct{} //純轉換Golnagstring，無做任何檢查或處理
 func (_ StringType) GetValue(inputValue string) (output interface{}, err error) {
 	return inputValue, nil
 }
@@ -89,8 +136,18 @@ func (_ SwitchType) GetValue(inputValue string) (output interface{}, err error) 
 	}
 }
 
-type HostURL struct{} //string，網址判斷
-func (_ HostURL) GetValue(inputValue string) (output interface{}, err error) {
+type ValidHostURL struct{} //string，host網域判斷(不包含Scheme)
+func (_ ValidHostURL) GetValue(inputValue string) (output interface{}, err error) {
+	_, err = url.Parse(inputValue)
+	if err != nil { //不合法網址
+		return nil, fmt.Errorf("'%v' > 不合法的網址", inputValue)
+	} else {
+		return inputValue, nil
+	}
+}
+
+type ValidWebURL struct{} //string，Web網址判斷
+func (_ ValidWebURL) GetValue(inputValue string) (output interface{}, err error) {
 	cache, err := url.Parse(inputValue)
 	if err != nil { //不合法網址
 		return nil, fmt.Errorf("'%v' > 不合法的網址", inputValue)
@@ -103,30 +160,32 @@ func (_ HostURL) GetValue(inputValue string) (output interface{}, err error) {
 	}
 }
 
-type HostIP struct{} //string，IPv4可帶port，例如:"192.168.0.1:1234"
-func (_ HostIP) GetValue(inputValue string) (output interface{}, err error) {
-	//暫時不考慮ipv6
-	cache := strings.Split(inputValue, ":")
-	count := len(cache)
-	if count == 1 {
-		address := net.ParseIP(inputValue)
-		if address == nil { //不合法IP
-			return nil, fmt.Errorf("'%v' > 不合法的IP", inputValue)
-		} else {
-			return address.String(), nil
-		}
-	} else if count == 2 {
-		port, err := strconv.ParseUint(cache[1], 10, 32)
-		if err == nil {
-			address := net.ParseIP(cache[0])
-			if address != nil || port != 0 { //不合法IP
-				return address.String() + ":" + fmt.Sprint(port), nil
-			}
-		}
-		return nil, fmt.Errorf("'%v' > 不合法的Port", inputValue)
+type ValidIPnPort struct{} //string，IPv4可帶port，例如:"192.168.0.1:1234"
+func (_ ValidIPnPort) GetValue(inputValue string) (output interface{}, err error) {
+
+	var portString string
+	var ipString string
+	portIndex := strings.LastIndex(inputValue, ":")
+	if portIndex > 1 {
+		portUInt, err := strconv.ParseUint(inputValue[portIndex+1:], 10, 16) //0~65535
+		if err != nil {
+			return "", fmt.Errorf("不合法的Port")
+		} //0~65535
+		portString = ":" + fmt.Sprint(portUInt)
+		ipString = inputValue[:portIndex]
 	} else {
-		return nil, fmt.Errorf("'%v' > 不合法的IP:Port", inputValue)
+		ipString = inputValue
 	}
+
+	ipNet := net.ParseIP(ipString)
+	if ipNet == nil {
+		return "", fmt.Errorf("不合法的IP")
+	}
+
+	if ipNet.To4() == nil || ipNet.To16() == nil { //ipv4 or ipv6
+		return "", fmt.Errorf("不合法的IPv4,IPv6")
+	}
+	return ipNet.String() + portString, nil
 }
 
 func StringToNumber(number string) (int, error) {

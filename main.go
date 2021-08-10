@@ -43,9 +43,25 @@ func main() {
 		fmt.Printf("輸出結果: %v (%T)\n", exUint, exUint)
 	} //輸出結果: 11 (uint64), 錯誤提示: input value > '-99.9' > 不可低於10 strconv.ParseUint: parsing "-99": invalid syntax ; default value > <nil>
 
+	var stringInt string
+	err = customVar.SetConfig("強制字串", "預設值", &stringInt, &customVar.StringType{})
+	if err != nil {
+		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", stringInt, stringInt, err)
+	} else {
+		fmt.Printf("輸出結果: %v (%T)\n", stringInt, stringInt)
+	} //輸出結果: 強制字串 (string)
+
+	var stringWrongInt string
+	err = customVar.SetConfig("60.1", "90", &stringWrongInt, &customVar.Int8Type{})
+	if err != nil {
+		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", stringWrongInt, stringWrongInt, err)
+	} else {
+		fmt.Printf("輸出結果: %v (%T)\n", stringWrongInt, stringWrongInt)
+	} //輸出結果: 90 (string), 錯誤提示: strconv.ParseInt: parsing "60.1": invalid syntax
+
 	var exSlice []uint32
 	exSlice = append(exSlice, 123)
-	err = customVar.SetConfig("456", "111", &exSlice, &customVar.AddStringSlice{})
+	err = customVar.SetConfig("456", "111", &exSlice, &customVar.BaseSlice{})
 	if err != nil {
 		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exSlice, exSlice, err)
 	} else {
@@ -54,7 +70,7 @@ func main() {
 
 	var exCustomTypeSlice []interface{}
 	exCustomTypeSlice = append(exCustomTypeSlice, 456)
-	err = customVar.SetConfig("Test", "Def", &exCustomTypeSlice, &customVar.AddStringSlice{})
+	err = customVar.SetConfig("Test", "Def", &exCustomTypeSlice, &customVar.BaseSlice{})
 	if err != nil {
 		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exCustomTypeSlice, exCustomTypeSlice, err)
 	} else {
@@ -72,6 +88,16 @@ func main() {
 
 	var exCustomTypeMap interface{}
 	err = customVar.SetConfig("testKey|t1|t2|t3|t4", nil, &exCustomTypeMap, &customTypeMap{})
+	if err != nil {
+		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exCustomTypeMap, exCustomTypeMap, err)
+	} else {
+		exCustomTypeMapAssertion := exCustomTypeMap.(map[string]*CustomTypeValue)
+		for index, value := range exCustomTypeMapAssertion {
+			fmt.Printf("輸出結果: %v %v (%T)\n", index, value, value)
+		}
+	} //輸出結果: testKey &{t1 t2 t3 t4 } (*main.CustomTypeValue)
+
+	err = customVar.SetConfig("XestKey2|t1|t2|t3|t4", nil, &exCustomTypeMap, &customTypeMap{})
 	if err != nil {
 		fmt.Printf("輸出結果: %v (%T), 錯誤提示: %v\n", exCustomTypeMap, exCustomTypeMap, err)
 	} else {
